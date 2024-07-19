@@ -1,0 +1,33 @@
+import requests
+
+def get_weather_data(location):
+    api_key = "4WWSJu4K0c02kD3jw7eZpyM4BUH1Yt68"
+    url = f"https://api.tomorrow.io/v4/weather/forecast?location={location}&apikey={api_key}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    return None
+
+def show_weather_data(weather_data):
+    if weather_data:
+        location_name = weather_data.get('location', {}).get('name', 'Unknown location')
+        temperature = weather_data.get('temperature', {}).get('value', 'N/A')
+        weather_description = weather_data.get('weather', [{}])[0].get('description', 'N/A')
+        humidity = weather_data.get('humidity', {}).get('value', 'N/A')
+        wind_speed = weather_data.get('wind', {}).get('speed', {}).get('value', 'N/A')
+
+        print(f"Current Weather in {location_name}:")
+        print(f"Temperature: {temperature}°C")
+        print(f"Weather Conditions: {weather_description}")
+        print(f"Humidity: {humidity}%")
+        print(f"Wind Speed: {wind_speed} m/s")
+    else:
+        print("Unable to retrieve weather data.")
+
+def main():
+    location = input("Please enter the city name or coordinates (lat,lon): ")
+    weather_data = get_weather_data(location)
+    show_weather_data(weather_data)
+
+if __name__ == "__main__":
+    main()
